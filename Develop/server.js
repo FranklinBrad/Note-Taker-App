@@ -25,12 +25,22 @@ if(error) {
 });
 
 
-app.get('/api/notes', (req, res) => {
-  fs.appendFile('./db.json', 'utf8', (err) =>
-    err ? console.error(err) : console.log('Success!')
-)
-});
+app.post('/api/notes', (req, res) => {
+  const {title, text} = req.body
+  if (title && text) {
+  const newNote = {
+    title,
+    text
+  };
+  const response = {
+    status: 'success',
+    body: newNote
+  }
+  console.log(newNote)
+ fs.appendFile('./develope/db/db.json', newNote ,(error)=>error?console.error(error):console.log("successful") )
 
+}
+});
 app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, '/Develop/public/index.html'))
 );
