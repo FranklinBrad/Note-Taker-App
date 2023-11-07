@@ -13,32 +13,44 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/api/notes', (req, res) => {
-fs.readFile('db/db.json', 'utf8', (error, data) =>{
-if(error) {
-   console.log('error')
- }else { 
-  console.log(typeof data)
-  res.send(data)
-}
-});
+  fs.readFile('db/db.json', 'utf8', (error, data) =>{
+  if(error) {
+     console.log('error')
+   }else { 
+    console.log(typeof data)
+    res.send(data)
+  }
+  });
+  
+  });
 
-});
+
+
+
 
 
 app.post('/api/notes', (req, res) => {
   const {title, text} = req.body
   if (title && text) {
-  const newNote = {
-    title,
-    text
+ const newNote = {
+  title,
+  text
   };
-  const response = {
-    status: 'success',
-    body: newNote
-  }
-  console.log(newNote)
- fs.appendFile('./develope/db/db.json', newNote ,(error)=>error?console.error(error):console.log("successful") )
+  fs.readFile('db/db.json', 'utf8', (error, data) =>{
+    if(error) {
+       console.log('error')
+     }else {
+      console.log(typeof data)
+      res.send(data)
+      parsedData = JSON.parse(data)
+    parsedData.push(newNote)
+    fs.writeFile("./db/db.json", JSON.stringify(parsedData), (error) => {
+      console.log("An error occured");
+      error ? console.error(error) : console.log("successful")
+    })
+     }})
 
+ 
 }
 });
 app.get('/', (req, res) =>
